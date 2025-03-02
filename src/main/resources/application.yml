@@ -1,0 +1,8 @@
+server:
+  servlet:
+    context-path: /tnr
+spring:
+  application:
+    name: backend
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
