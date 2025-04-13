@@ -6,3 +6,9 @@ spring:
     name: backend
   jpa:
     database-platform: org.hibernate.dialect.OracleDialect
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
