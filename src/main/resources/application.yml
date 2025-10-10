@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /tnr
+    context-path: /scheduler
 spring:
   application:
     name: backend
@@ -12,3 +12,9 @@ management:
     health:
       probes:
         enabled: true
+
+logging:
+  level:
+    org:
+      h2: TRACE
+    hibernate: TRACE

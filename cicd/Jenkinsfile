@@ -1,0 +1,80 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+    - name: node
+      image: node:19
+      command:
+        - cat
+      tty: true
+      volumeMounts:
+        - mountPath: "/root/jenkins_home"
+          name: "jenkins-m2-cache"
+          readOnly: false
+    - name: maven
+      image: maven:3.9.6-eclipse-temurin-17
+      command:
+        - cat
+      tty: true
+      volumeMounts:
+        - mountPath: "/root/jenkins_home"
+          name: "jenkins-m2-cache"
+          readOnly: false
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:debug
+      command:
+        - sleep
+      args:
+        - 99d
+      volumeMounts:
+        - mountPath: /kaniko/.docker
+          name: "volume-3"
+          readOnly: true
+  volumes:
+    - name: "jenkins-m2-cache"
+      persistentVolumeClaim:
+        claimName: jenkins
+        readOnly: false
+    - name: "volume-3"
+      secret:
+        secretName: kaniko-config
+        '''
+    }
+  }
+  stages {
+    stage('FrontEnd') {
+      steps {
+        dir('frontend') {
+            container('node') {
+              git branch: env.BRANCH_NAME, changelog: false, poll: false, url: 'https://github.com/erwanjouan/test-tool-frontend'
+              sh 'cp -r /root/jenkins_home/node_modules . || true'
+              sh 'npm install'
+              sh 'npm install -g @angular/cli@19'
+              sh 'ng build --base-href /tnr/'
+              sh 'cp -r node_modules/ /root/jenkins_home/'
+            }
+            container('maven') {
+              sh 'mvn -Dmaven.repo.local=/root/jenkins_home/.m2 clean install'
+            }
+        }
+      }
+    }
+    stage('Backend') {
+      steps {
+        dir('backend') {
+            container('maven') {
+              git branch: env.BRANCH_NAME, changelog: false, poll: false, url: 'https://github.com/erwanjouan/test-tool-backend'
+              sh 'mvn -Dmaven.repo.local=/root/jenkins_home/.m2 clean install'
+            }
+            container('kaniko') {
+               sh '/kaniko/executor --context `pwd` --dockerfile "Dockerfile" --customPlatform=linux/amd64 --destination "rone56/scheduler:${GIT_COMMIT}"'
+            }
+        }
+      }
+    }
+  }
+}

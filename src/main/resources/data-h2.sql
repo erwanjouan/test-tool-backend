@@ -1,44 +1,59 @@
 --
--- NR_Test
+-- task_template
 --
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (1, 'Description P1/Test1', 'SC01', 'Titre1', true);
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (1, 'Description P1/Test2', 'SC02', 'Titre2', true);
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (1, 'Description P1/Test3', 'SC03', 'Titre3', false);
+insert into task_template(id, title, content, category)
+values ('1', 'list files', 'ls', 'system');
+
 --
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (2, 'Description P2/Test1', 'SC04', 'Titre4', true);
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (2, 'Description P2/Test2', 'SC05', 'Titre5', false);
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (2, 'Description P2/Test3', 'SC06', 'Titre6', false);
+-- Execution
 --
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (3, 'Description P3/Test1', 'SC07', 'Titre7', true);
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (3, 'Description P3/Test2', 'SC08', 'Titre8', false);
-insert into NR_Test(priorite, description, reference, titre, actif)
-values (3, 'Description P3/Test3', 'SC09', 'Titre9', false);
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec1', 'Desc1', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec2', 'Desc2', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec', 'Desc1', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec4', 'Desc3', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec5', 'Desc1', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec6', 'Desc2', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec7', 'Desc1', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec8', 'Desc3', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec9', 'Desc1', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec10', 'Desc2', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec11', 'Desc1', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
+
+insert into Execution(name, description, start_time, end_time, status)
+values ('Exec12', 'Desc3', '2022-12-31 23.59.59', '2022-12-31 23.59.59', 'COMPLETED');
 --
--- NR_Execution
+-- Task
 --
-insert into NR_Execution(name, description, status)
-values ('Exec1', 'Desc1', 'OK');
+insert into Task(execution_id, task_template_id)
+values (1, '1');
+
 --
-insert into Nr_Execution_Param(nr_execution_id, nr_Test_Id, reference)
-values (1, 1, 'ABSI1234567890');
+-- Param
 --
-insert into Nr_Execution_Param(nr_execution_id, nr_Test_Id, reference)
-values (1, 2, 'ABST1234567890');
+insert into Param(task_id, content)
+values (1, '/tmp');
 --
+-- insert into Param(task_id, value)
+-- values (2, 'ABST1234567890');
 --
-insert into NR_Execution(name, description, status)
-values ('Exec2', 'Desc2', 'KO');
---
-insert into Nr_Execution_Param(nr_execution_id, nr_Test_Id, reference)
-values (2, 3, 'ABSI9876543210');
---
-insert into Nr_Execution_Param(nr_execution_id, nr_Test_Id, reference)
-values (2, 4, 'ABST9876543210');

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: scheduler
+  name: scheduler
+  namespace: run
+spec:
+  selector:
+    matchLabels:
+      app: scheduler
+  template:
+    metadata:
+      labels:
+        app: scheduler
+    spec:
+      containers:
+      - image: "rone56/scheduler:1565d8f28c06f0d6b9d29603cc6016d8f6a4b0a3"
+        imagePullPolicy: Always
+        name: scheduler
