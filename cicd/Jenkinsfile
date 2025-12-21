@@ -34,6 +34,13 @@ spec:
         - mountPath: /kaniko/.docker
           name: "volume-3"
           readOnly: true
+    - name: kubectl
+      image: docker.io/bitnami/kubectl
+      command:
+        - cat
+      tty: true
+      securityContext:
+        runAsUser: 1000
   volumes:
     - name: "jenkins-m2-cache"
       persistentVolumeClaim:
@@ -54,7 +61,7 @@ spec:
               sh 'cp -r /root/jenkins_home/node_modules . || true'
               sh 'npm install'
               sh 'npm install -g @angular/cli@19'
-              sh 'ng build --base-href /tnr/'
+              sh 'ng build --base-href /scheduler/'
               sh 'cp -r node_modules/ /root/jenkins_home/'
             }
             container('maven') {
@@ -69,9 +76,18 @@ spec:
             container('maven') {
               git branch: env.BRANCH_NAME, changelog: false, poll: false, url: 'https://github.com/erwanjouan/test-tool-backend'
               sh 'mvn -Dmaven.repo.local=/root/jenkins_home/.m2 clean install'
+              sh 'sed -e "s/CURRENT_GIT_COMMIT/$GIT_COMMIT/g" run/deployment.yml > deployment.yml'
             }
             container('kaniko') {
                sh '/kaniko/executor --context `pwd` --dockerfile "Dockerfile" --customPlatform=linux/amd64 --destination "rone56/scheduler:${GIT_COMMIT}"'
+            }
+            container('kubectl') {
+               sh 'kubectl apply -f deployment.yml'
+               sh 'kubectl wait --for=condition=available deployment/scheduler -n run'
+               script {
+                   def nodePort = sh(returnStdout: true, script: 'kubectl get svc scheduler -n run -o jsonpath="{.spec.ports[0].nodePort}"').trim()
+                   echo "http://localhost:${nodePort}/scheduler"
+               }
             }
         }
       }

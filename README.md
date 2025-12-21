@@ -2,9 +2,9 @@
 
 ## test
 
-http://localhost:8080/tnr/api/tests
-http://localhost:8080/tnr/api/executions
-http://localhost:8080/tnr/api/tests?priorite=1
+http://localhost:8080/scheduler/api/tests
+http://localhost:8080/scheduler/api/executions
+http://localhost:8080/scheduler/api/tests?priorite=1
 
 ## Docker
 
