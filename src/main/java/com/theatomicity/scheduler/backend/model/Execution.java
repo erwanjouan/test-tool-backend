@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -14,7 +15,7 @@ import java.util.TreeSet;
 @Entity
 @Getter
 @Setter
-public class Execution implements LifeCycleHooks {
+public class Execution implements LifeCycleHooks, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -59,5 +60,18 @@ public class Execution implements LifeCycleHooks {
     public void onCancel() {
         this.status = Status.CANCELLED;
         this.endTime = LocalDateTime.now();
+    }
+
+    @Override
+    public String toString() {
+        return "Execution{" +
+                "id=" + this.id +
+                ", name='" + this.name + '\'' +
+                ", description='" + this.description + '\'' +
+                ", status=" + this.status +
+                ", startTime=" + this.startTime +
+                ", endTime=" + this.endTime +
+                ", tasks=" + this.tasks +
+                '}';
     }
 }

@@ -24,3 +24,7 @@ https://springframework.guru/using-h2-and-oracle-with-spring-boot/
     - When we specify the generation strategy as GenerationType.IDENTITY
       we are telling the persistence provider(hibernate)
       to let the database handle the auto incrementing of the id.
+
+### AOP
+
+- https://medium.com/@2015-2-60-004/spring-aop-interceptors-beyond-http-requests-mastering-method-call-interception-e89a71d7530c

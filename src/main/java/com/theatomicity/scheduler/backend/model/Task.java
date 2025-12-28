@@ -44,4 +44,16 @@ public class Task implements Comparable<Task> {
                 .map(TaskTemplate::getId)
                 .orElse("");
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + this.id +
+                ", status=" + this.status +
+                ", startTime=" + this.startTime +
+                ", endTime=" + this.endTime +
+                ", taskTemplate=" + this.taskTemplate +
+                ", params=" + this.params +
+                '}';
+    }
 }
