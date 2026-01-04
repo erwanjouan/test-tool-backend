@@ -88,9 +88,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-core</artifactId>
-            <version>3.25.10</version>
+            <groupId>com.theatomicity</groupId>
+            <artifactId>aop.ut.generator</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
