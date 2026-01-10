@@ -9,4 +9,5 @@ public interface ExecutionRepository extends JpaRepository<Execution, Long> {
 
     List<Execution> findAllByOrderByIdDesc();
 
+    List<Execution> findAllById(Long id);
 }

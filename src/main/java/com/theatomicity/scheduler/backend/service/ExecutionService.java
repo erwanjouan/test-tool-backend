@@ -1,6 +1,7 @@
 package com.theatomicity.scheduler.backend.service;
 
 import com.theatomicity.scheduler.backend.model.Execution;
+import com.theatomicity.scheduler.backend.model.SseEventType;
 import com.theatomicity.scheduler.backend.model.Status;
 import com.theatomicity.scheduler.backend.model.Task;
 import com.theatomicity.scheduler.backend.repository.ExecutionRepository;
@@ -20,6 +21,8 @@ public class ExecutionService {
     private final TaskTemplateRepository taskTemplateRepository;
 
     private final TaskScheduler taskScheduler;
+
+    private final NotifyService notifyService;
 
     public List<Execution> findAll() {
         return this.executionRepository.findAllByOrderByIdDesc();
@@ -68,19 +71,30 @@ public class ExecutionService {
         return null;
     }
 
-    public Execution duplicate(final Long executionId) {
-        return this.executionRepository.findById(executionId)
-                .map(clonedExecution -> {
-                            final Execution execution = new Execution();
-                            execution.setStatus(Status.CREATED);
-                            execution.setName(clonedExecution.getName());
-                            execution.setDescription(clonedExecution.getDescription());
-                            for (final Task clonedTask : clonedExecution.getTasks()) {
-                                final Task task = new Task();
-                                task.setTaskTemplate(clonedTask.getTaskTemplate());
-                            }
-                            return execution;
-                        }
-                ).orElse(null);
+    public Long duplicate(final Long executionId) {
+        final List<Execution> duplicated = this.executionRepository.findAllById(executionId);
+        if (duplicated.size() == 1) {
+            final Execution cloned = duplicated.get(0);
+            final Execution execution = new Execution();
+            this.updateStatus(execution, Status.CREATED);
+            execution.setName(cloned.getName());
+            execution.setDescription(cloned.getDescription());
+            cloned.getTasks().forEach(task -> {
+                final Task clonedTask = new Task();
+                clonedTask.setTaskTemplate(task.getTaskTemplate());
+                clonedTask.setExecution(execution);
+                execution.getTasks().add(clonedTask);
+            });
+            final Execution saved = this.executionRepository.save(execution);
+            this.notifyService.pushExecution(saved, SseEventType.EXECUTION_CREATED);
+            return saved.getId();
+        } else {
+            throw new RuntimeException("Execution not found");
+        }
+    }
+
+    private void updateStatus(final Execution execution, final Status status) {
+        execution.setStatus(status);
+        execution.getTasks().forEach(task -> task.setStatus(status));
     }
 }

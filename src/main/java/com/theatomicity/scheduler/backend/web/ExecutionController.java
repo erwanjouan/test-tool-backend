@@ -24,8 +24,8 @@ public class ExecutionController {
         return this.executionService.find(executionId);
     }
 
-    @GetMapping("/{executionId}/duplicate")
-    public Execution duplicate(@PathVariable final Long executionId) {
+    @PostMapping("/duplicate")
+    public Long duplicate(@RequestBody final Long executionId) {
         return this.executionService.duplicate(executionId);
     }
 
