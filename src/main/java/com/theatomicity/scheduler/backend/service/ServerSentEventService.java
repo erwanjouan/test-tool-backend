@@ -5,8 +5,8 @@ import com.theatomicity.scheduler.backend.mapper.TaskDtoMapper;
 import com.theatomicity.scheduler.backend.model.Execution;
 import com.theatomicity.scheduler.backend.model.SseEventType;
 import com.theatomicity.scheduler.backend.model.TaskLog;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -20,19 +20,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 @Service
-@Slf4j
 public class ServerSentEventService {
 
+    private static final Logger log = LoggerFactory.getLogger(ServerSentEventService.class);
+
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final TaskDtoMapper taskDtoMapper;
+    private final ExecutionDtoMapper executionDtoMapper;
 
-    @Autowired
-    private TaskDtoMapper taskDtoMapper;
-
-    @Autowired
-    private ExecutionDtoMapper executionDtoMapper;
+    public ServerSentEventService(TaskDtoMapper taskDtoMapper, ExecutionDtoMapper executionDtoMapper) {
+        this.taskDtoMapper = taskDtoMapper;
+        this.executionDtoMapper = executionDtoMapper;
+    }
 
     public SseEmitter addEmitter(final String subscriberId) {
         final SseEmitter emitter = new SseEmitter();
+        this.emitters.put(subscriberId, emitter);
         emitter.onTimeout(() -> {
             emitter.complete();
             this.removeEmitter(subscriberId);
@@ -42,8 +45,7 @@ public class ServerSentEventService {
             emitter.completeWithError(e);
             this.removeEmitter(subscriberId);
         });
-
-        return null;
+        return emitter;
     }
 
     private void removeEmitter(final String subscriberId) {
@@ -104,12 +106,11 @@ public class ServerSentEventService {
                         .id(UUID.randomUUID().toString())
                         .data("Heartbeat"));
             } catch (final Exception e) {
-                log.error("Error sending SSE event", e);
                 this.removeEmitter(entry.getKey());
             }
         }
     }
-    
+
     private void sendToSeeEmitter(final SseEventType sseEventType, final Map.Entry<String, SseEmitter> entry, final Map<String, Object> taskLogDto) {
         try {
             entry.getValue().send(SseEmitter.event()
@@ -117,9 +118,7 @@ public class ServerSentEventService {
                     .id(UUID.randomUUID().toString())
                     .data(taskLogDto));
         } catch (final Exception e) {
-            log.error("Error sending SSE event", e);
             this.removeEmitter(entry.getKey());
         }
     }
-
 }

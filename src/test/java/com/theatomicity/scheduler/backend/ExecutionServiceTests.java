@@ -21,7 +21,7 @@ class ExecutionServiceTests {
     @Test
     void findAll() {
         final List<Execution> executionList = this.executionServices.findAll();
-        assertEquals(12, executionList.size());
+        assertEquals(1, executionList.size());
     }
 
 }

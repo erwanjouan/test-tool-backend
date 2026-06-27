@@ -5,11 +5,9 @@ public interface LifeCycleHooks {
 
     void onStart();
 
-    void onError();
+    void onCompletionError();
 
     void onCompletionOk();
-
-    void onCompletionKo();
 
     void onCancel();
 }

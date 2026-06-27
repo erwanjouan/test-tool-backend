@@ -1,20 +1,13 @@
 package com.theatomicity.scheduler.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-// don't use @Data with Hibernate
-// https://thorben-janssen.com/lombok-hibernate-how-to-avoid-common-pitfalls/
-
 @Entity
-@Getter
-@Setter
 public class Execution implements LifeCycleHooks, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +21,21 @@ public class Execution implements LifeCycleHooks, Serializable {
     @OneToMany(mappedBy = "execution", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private SortedSet<Task> tasks = new TreeSet<>();
 
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
+    public SortedSet<Task> getTasks() { return tasks; }
+    public void setTasks(SortedSet<Task> tasks) { this.tasks = tasks; }
+
     @Override
     public void onCreate() {
         this.status = Status.CREATED;
@@ -40,19 +48,14 @@ public class Execution implements LifeCycleHooks, Serializable {
     }
 
     @Override
-    public void onError() {
+    public void onCompletionError() {
         this.status = Status.ERROR;
+        this.endTime = LocalDateTime.now();
     }
 
     @Override
     public void onCompletionOk() {
         this.status = Status.COMPLETED;
-        this.endTime = LocalDateTime.now();
-    }
-
-    @Override
-    public void onCompletionKo() {
-        this.status = Status.ERROR;
         this.endTime = LocalDateTime.now();
     }
 

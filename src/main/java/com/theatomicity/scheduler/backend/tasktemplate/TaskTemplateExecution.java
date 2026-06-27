@@ -1,4 +1,4 @@
-package com.theatomicity.scheduler.backend.service;
+package com.theatomicity.scheduler.backend.tasktemplate;
 
 import com.theatomicity.scheduler.backend.model.Task;
 

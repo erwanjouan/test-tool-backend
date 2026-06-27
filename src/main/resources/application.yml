@@ -13,8 +13,8 @@ management:
       probes:
         enabled: true
 
-logging:
-  level:
-    org:
-      h2: TRACE
-    hibernate: TRACE
+    #logging:
+    #level:
+    #org:
+    #  h2: TRACE
+    #hibernate: TRACE

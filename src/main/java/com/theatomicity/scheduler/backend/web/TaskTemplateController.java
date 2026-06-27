@@ -17,7 +17,7 @@ public class TaskTemplateController {
     @Autowired
     private TaskTemplateService taskTemplateService;
 
-    @GetMapping("task-template")
+    @GetMapping("task-templates")
     public List<TaskTemplate> getTasks(@RequestParam(required = false) final String category) {
         return this.taskTemplateService.findByCategory(category);
     }

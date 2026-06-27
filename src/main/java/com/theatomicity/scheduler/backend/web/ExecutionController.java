@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/execution")
+@RequestMapping("/api/executions")
 public class ExecutionController {
 
     @Autowired
@@ -42,5 +42,10 @@ public class ExecutionController {
     @PostMapping("/{executionId}/start")
     public Long start(@PathVariable final Long executionId) {
         return this.executionService.start(executionId);
+    }
+
+    @PostMapping("/cancel")
+    public Long cancel(@RequestBody final Long executionId) {
+        return this.executionService.cancel(executionId);
     }
 }
