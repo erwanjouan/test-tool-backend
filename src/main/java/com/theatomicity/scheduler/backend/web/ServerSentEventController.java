@@ -1,6 +1,6 @@
 package com.theatomicity.scheduler.backend.web;
 
-import com.theatomicity.scheduler.backend.service.ServerSentEventService;
+import com.theatomicity.scheduler.backend.sse.ServerSentEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

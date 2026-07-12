@@ -78,11 +78,13 @@
             <version>1.6.3</version>
             <scope>provided</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>com.theatomicity</groupId>
             <artifactId>aop.ut.generator</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        -->
     </dependencies>
 
     <build>

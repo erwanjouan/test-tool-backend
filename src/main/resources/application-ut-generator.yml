@@ -1,0 +1,11 @@
+ut-generator:
+  packages:
+    base: com.theatomicity.scheduler.backend
+    targets:
+      - com.theatomicity.scheduler.backend.service
+      - com.theatomicity.scheduler.backend.repository
+      - com.theatomicity.scheduler.backend.web
+      - com.theatomicity.scheduler.backend.sse
+logging:
+  level:
+    root: DEBUG

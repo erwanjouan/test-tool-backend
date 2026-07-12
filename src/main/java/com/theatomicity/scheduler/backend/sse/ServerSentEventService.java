@@ -1,4 +1,4 @@
-package com.theatomicity.scheduler.backend.service;
+package com.theatomicity.scheduler.backend.sse;
 
 import com.theatomicity.scheduler.backend.mapper.ExecutionDtoMapper;
 import com.theatomicity.scheduler.backend.mapper.TaskDtoMapper;
@@ -28,7 +28,7 @@ public class ServerSentEventService {
     private final TaskDtoMapper taskDtoMapper;
     private final ExecutionDtoMapper executionDtoMapper;
 
-    public ServerSentEventService(TaskDtoMapper taskDtoMapper, ExecutionDtoMapper executionDtoMapper) {
+    public ServerSentEventService(final TaskDtoMapper taskDtoMapper, final ExecutionDtoMapper executionDtoMapper) {
         this.taskDtoMapper = taskDtoMapper;
         this.executionDtoMapper = executionDtoMapper;
     }

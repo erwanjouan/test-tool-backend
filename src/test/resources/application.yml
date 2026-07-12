@@ -1,0 +1,4 @@
+ut-generator:
+  packages:
+    base: com.theatomicity.scheduler.backend
+    targets: []

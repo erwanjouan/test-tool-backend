@@ -5,6 +5,7 @@ import com.theatomicity.scheduler.backend.model.SseEventType;
 import com.theatomicity.scheduler.backend.model.Task;
 import com.theatomicity.scheduler.backend.model.TaskLog;
 import com.theatomicity.scheduler.backend.repository.TaskLogRepository;
+import com.theatomicity.scheduler.backend.sse.ServerSentEventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -18,7 +19,7 @@ public class NotifyService {
     private final ServerSentEventService serverSentEventService;
     private final TaskLogRepository taskLogRepository;
 
-    public NotifyService(ServerSentEventService serverSentEventService, TaskLogRepository taskLogRepository) {
+    public NotifyService(final ServerSentEventService serverSentEventService, final TaskLogRepository taskLogRepository) {
         this.serverSentEventService = serverSentEventService;
         this.taskLogRepository = taskLogRepository;
     }

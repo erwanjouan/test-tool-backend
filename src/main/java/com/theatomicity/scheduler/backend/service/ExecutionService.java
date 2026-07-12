@@ -1,6 +1,5 @@
 package com.theatomicity.scheduler.backend.service;
 
-import com.theatomicity.aop.ut.generator.annotation.GenerateMockitoUt;
 import com.theatomicity.scheduler.backend.model.Execution;
 import com.theatomicity.scheduler.backend.model.SseEventType;
 import com.theatomicity.scheduler.backend.model.Status;
@@ -17,6 +16,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
+import static com.theatomicity.scheduler.backend.model.Status.CREATED;
+import static com.theatomicity.scheduler.backend.model.Status.RUNNING;
+
 @Service
 public class ExecutionService {
 
@@ -29,12 +31,12 @@ public class ExecutionService {
     private final TaskTemplateExecution taskTemplateExecution;
     private final ExecutorService executor;
 
-    public ExecutionService(ExecutionRepository executionRepository,
-                            TaskTemplateRepository taskTemplateRepository,
-                            CustomTaskScheduler customTaskScheduler,
-                            NotifyService notifyService,
-                            TaskTemplateExecution taskTemplateExecution,
-                            ExecutorService executor) {
+    public ExecutionService(final ExecutionRepository executionRepository,
+                            final TaskTemplateRepository taskTemplateRepository,
+                            final CustomTaskScheduler customTaskScheduler,
+                            final NotifyService notifyService,
+                            final TaskTemplateExecution taskTemplateExecution,
+                            final ExecutorService executor) {
         this.executionRepository = executionRepository;
         this.taskTemplateRepository = taskTemplateRepository;
         this.customTaskScheduler = customTaskScheduler;
@@ -74,7 +76,6 @@ public class ExecutionService {
         return new Execution();
     }
 
-    @GenerateMockitoUt
     public Long start(final Long executionId) {
         return this.executionRepository.findById(executionId)
                 .map(execution -> {
@@ -109,7 +110,7 @@ public class ExecutionService {
         if (duplicated.size() == 1) {
             final Execution cloned = duplicated.get(0);
             final Execution execution = new Execution();
-            this.updateStatus(execution, Status.CREATED);
+            this.updateStatus(execution, CREATED);
             execution.setName(cloned.getName());
             execution.setDescription(cloned.getDescription());
             cloned.getTasks().forEach(task -> {
@@ -148,11 +149,15 @@ public class ExecutionService {
     private void cancelPendingTasks(final Execution exec) {
         exec.getTasks().forEach(
                 task -> {
-                    if (Boolean.TRUE.equals(task.getStatus().isNotCompleted())) {
+                    if (this.isNotCompleted(task.getStatus())) {
                         task.onCancel();
                         this.customTaskScheduler.whenCancel(task);
                     }
                 }
         );
+    }
+
+    public Boolean isNotCompleted(final Status status) {
+        return RUNNING.equals(status) || CREATED.equals(status);
     }
 }
