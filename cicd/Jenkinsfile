@@ -16,7 +16,7 @@ spec:
           name: "jenkins-m2-cache"
           readOnly: false
     - name: maven
-      image: maven:3.9.6-eclipse-temurin-17
+      image: maven:3.9.6-eclipse-temurin-25
       command:
         - cat
       tty: true
