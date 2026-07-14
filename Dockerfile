@@ -2,7 +2,7 @@
 FROM eclipse-temurin:25-jre-alpine AS builder
 WORKDIR /build
 COPY target/*.jar app.jar
-RUN java -Djarmode=tools extract --destination extracted
+RUN java -Djarmode=tools -jar app.jar extract --destination extracted
 
 # ── Stage 2: minimal runtime image ───────────────────────────────────────────
 FROM eclipse-temurin:25-jre-alpine
