@@ -1,6 +1,7 @@
 package com.theatomicity.scheduler.backend.model;
 
 public interface LifeCycleHooks {
+
     void onCreate();
 
     void onStart();
