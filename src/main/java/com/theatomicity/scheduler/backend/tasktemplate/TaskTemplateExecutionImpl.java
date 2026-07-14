@@ -6,7 +6,6 @@ import com.theatomicity.scheduler.backend.model.Task;
 import com.theatomicity.scheduler.backend.service.CustomTaskScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +21,14 @@ public class TaskTemplateExecutionImpl implements TaskTemplateExecution {
 
     private static final Logger log = LoggerFactory.getLogger(TaskTemplateExecutionImpl.class);
 
-    @Autowired
-    private CustomTaskScheduler customTaskScheduler;
+    private final CustomTaskScheduler customTaskScheduler;
 
-    @Autowired
-    private ExecutorService executor;
+    private final ExecutorService executor;
+
+    public TaskTemplateExecutionImpl(final CustomTaskScheduler customTaskScheduler, final ExecutorService executor) {
+        this.customTaskScheduler = customTaskScheduler;
+        this.executor = executor;
+    }
 
     @Async
     @Override

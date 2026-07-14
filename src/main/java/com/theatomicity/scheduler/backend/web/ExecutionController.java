@@ -2,8 +2,12 @@ package com.theatomicity.scheduler.backend.web;
 
 import com.theatomicity.scheduler.backend.model.Execution;
 import com.theatomicity.scheduler.backend.service.ExecutionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -11,8 +15,11 @@ import java.util.List;
 @RequestMapping("/api/executions")
 public class ExecutionController {
 
-    @Autowired
-    private ExecutionService executionService;
+    private final ExecutionService executionService;
+
+    public ExecutionController(final ExecutionService executionService) {
+        this.executionService = executionService;
+    }
 
     @GetMapping
     public List<Execution> getExecutions() {
