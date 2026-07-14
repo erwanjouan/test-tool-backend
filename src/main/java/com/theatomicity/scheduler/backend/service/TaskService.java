@@ -19,8 +19,4 @@ public class TaskService {
         return this.taskRepository.findAll();
     }
 
-    public List<Task> findByCategory(final String category) {
-        return this.taskRepository.findAll();
-    }
-
 }

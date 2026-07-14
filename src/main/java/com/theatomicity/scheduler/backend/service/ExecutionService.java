@@ -5,7 +5,6 @@ import com.theatomicity.scheduler.backend.model.SseEventType;
 import com.theatomicity.scheduler.backend.model.Status;
 import com.theatomicity.scheduler.backend.model.Task;
 import com.theatomicity.scheduler.backend.repository.ExecutionRepository;
-import com.theatomicity.scheduler.backend.repository.TaskTemplateRepository;
 import com.theatomicity.scheduler.backend.tasktemplate.TaskTemplateExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 
 import static com.theatomicity.scheduler.backend.model.Status.CREATED;
 import static com.theatomicity.scheduler.backend.model.Status.RUNNING;
@@ -25,24 +23,18 @@ public class ExecutionService {
     private static final Logger log = LoggerFactory.getLogger(ExecutionService.class);
 
     private final ExecutionRepository executionRepository;
-    private final TaskTemplateRepository taskTemplateRepository;
     private final CustomTaskScheduler customTaskScheduler;
     private final NotifyService notifyService;
     private final TaskTemplateExecution taskTemplateExecution;
-    private final ExecutorService executor;
 
     public ExecutionService(final ExecutionRepository executionRepository,
-                            final TaskTemplateRepository taskTemplateRepository,
                             final CustomTaskScheduler customTaskScheduler,
                             final NotifyService notifyService,
-                            final TaskTemplateExecution taskTemplateExecution,
-                            final ExecutorService executor) {
+                            final TaskTemplateExecution taskTemplateExecution) {
         this.executionRepository = executionRepository;
-        this.taskTemplateRepository = taskTemplateRepository;
         this.customTaskScheduler = customTaskScheduler;
         this.notifyService = notifyService;
         this.taskTemplateExecution = taskTemplateExecution;
-        this.executor = executor;
     }
 
     public List<Execution> findAll() {
